@@ -10,6 +10,7 @@ final _loginViewModel = ChangeNotifierProvider((ref) => LoginViewModel(
     ref.read(Repository.auth), ref.read(AppState.auth.notifier)));
 
 mixin LoginView {
+  //TODO:[tekeshwar] Add global snackbar to show this type of message / error
   void showError(AppError error);
 }
 

@@ -1,2 +1,1 @@
-export 'new_note.dart';
-export 'note_page.dart';
+export 'edit_note_page.dart';

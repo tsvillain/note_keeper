@@ -12,6 +12,8 @@ abstract class BackendDependency {
 
 abstract class Repository {
   static Provider<AuthRepository> get auth => AuthRepository.provider;
+  static Provider<DatabaseRepository> get database =>
+      DatabaseRepository.provider;
 }
 
 abstract class AppState {

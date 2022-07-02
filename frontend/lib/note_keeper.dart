@@ -25,6 +25,8 @@ class _NoteKeeperState extends ConsumerState<NoteKeeper> {
     }
 
     return MaterialApp.router(
+      themeMode: ThemeMode.dark,
+      darkTheme: ThemeData.dark(),
       routeInformationParser: const RoutemasterParser(),
       routerDelegate: RoutemasterDelegate(routesBuilder: (context) {
         final isAuthenticated = ref.watch(_isAuthenticateProvider);

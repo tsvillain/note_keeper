@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:note_keeper/presentation/pages/home/home_page.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:note_keeper/presentation/pages/authentication/authentication.dart';
 import 'package:note_keeper/presentation/pages/note/note.dart';
 
 abstract class AppRoutes {
-  static String get note => NotePage.routeName;
-  static String get newNote => NewNote.routeName;
+  static String get editNote => EditNotePage.routeName;
   static String get login => LoginPage.routeName;
   static String get register => RegisterPage.routeName;
+  static String get home => HomePage.routeName;
 }
 
 final routeLoggedOut = RouteMap(
@@ -18,15 +19,15 @@ final routeLoggedOut = RouteMap(
   },
 );
 final routeLoggedIn = RouteMap(
-  onUnknownRoute: (_) => const Redirect(NewNote.routeName),
+  onUnknownRoute: (_) => const Redirect(HomePage.routeName),
   routes: {
-    NewNote.routeName: (_) => const MaterialPage(child: NewNote()),
-    '${NotePage.routeName}/:id': (info) {
+    HomePage.routeName: (_) => const MaterialPage(child: HomePage()),
+    '${EditNotePage.routeName}/:id': (info) {
       final docId = info.pathParameters['id'];
-      if (docId == null) {
-        return const Redirect(NewNote.routeName);
-      }
-      return MaterialPage(child: NotePage(documentId: docId));
-    }
+      // if `docId` is null then New Note.
+      return MaterialPage(child: EditNotePage(noteId: docId));
+    },
+    EditNotePage.routeName: (_) =>
+        const MaterialPage(child: EditNotePage(noteId: null)),
   },
 );

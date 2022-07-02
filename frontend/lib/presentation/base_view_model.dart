@@ -16,4 +16,10 @@ abstract class BaseViewModel<T> extends ChangeNotifier {
   void detachView() {
     view = null;
   }
+
+  @override
+  void dispose() {
+    detachView();
+    super.dispose();
+  }
 }
