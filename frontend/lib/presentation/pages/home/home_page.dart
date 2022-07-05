@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:note_keeper/core/navigation/routes.dart';
+import 'package:note_keeper/presentation/pages/home/home_view_model.dart';
 import 'package:routemaster/routemaster.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -13,35 +13,20 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> {
-  final _notesListScrollController = ScrollController();
-  bool showAppBar = true;
+class _HomePageState extends ConsumerState<HomePage> with HomeView {
+  late final HomeViewModel _viewModel;
 
   @override
   void initState() {
-    _notesListScrollController.addListener(() {
-      if (_notesListScrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        if (showAppBar != true) {
-          setState(() {
-            showAppBar = true;
-          });
-        }
-      } else if (_notesListScrollController.position.userScrollDirection ==
-              ScrollDirection.reverse &&
-          _notesListScrollController.offset > kToolbarHeight) {
-        if (showAppBar != false) {
-          setState(() {
-            showAppBar = false;
-          });
-        }
-      }
-    });
+    _viewModel = ref.read(HomeViewModel.provider);
+    _viewModel.attachView(this);
+    _viewModel.initialize();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(HomeViewModel.provider);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -57,7 +42,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           child: Stack(
             children: [
               SingleChildScrollView(
-                controller: _notesListScrollController,
+                controller: _viewModel.notesListScrollController,
                 child: Column(
                   children: [
                     AppBar(
@@ -70,53 +55,43 @@ class _HomePageState extends ConsumerState<HomePage> {
                       mainAxisSpacing: 8,
                       crossAxisSpacing: 8,
                       axisDirection: AxisDirection.down,
-                      children: [
-                        "dfsdfsdsdf sfsd dsf ",
-                        "sdfsdfsdf sdf sdf sdf sdf fdgdfg",
-                        "sdfsdfsdfsdfdfgd fgkdfgsdklfhlasdb",
-                        "dfsdfsdsdf sfsd dsf ",
-                        "sdfsdfsdf sdf sdf sdf sdf fdgdfg",
-                        "sdfsdfsdfsdfdfgd fgkdfgsdklfhlasdb",
-                        "dfsdfsdsdf sfsd dsf ",
-                        "sdfsdfsdf sdf sdf sdf sdf fdgdfg",
-                        "sdfsdfsdfsdfdfgd fgkdfgsdklfhlasdb",
-                        "dfsdfsdsdf sfsd dsf ",
-                        "sdfsdfsdf sdf sdf sdf sdf fdgdfg",
-                        "sdfsdfsdfsdfdfgd fgkdfgsdklfhlasdb",
-                        "dfsdfsdsdf sfsd dsf ",
-                        "sdfsdfsdf sdf sdf sdf sdf fdgdfg",
-                        "sdfsdfsdfsdfdfgd fgkdfgsdklfhlasdb",
-                        "dfsdfsdsdf sfsd dsf ",
-                        "sdfsdfsdf sdf sdf sdf sdf fdgdfg",
-                        "sdfsdfsdfsdfdfgd fgkdfgsdklfhlasdb",
-                        "dfsdfsdsdf sfsd dsf ",
-                        "sdfsdfsdf sdf sdf sdf sdf fdgdfg",
-                        "sdfsdfsdfsdfdfgd fgkdfgsdklfhlasdb",
-                        "dfsdfsdsdf sfsd dsf ",
-                        "sdfsdfsdf sdf sdf sdf sdf fdgdfg",
-                        "sdfsdfsdfsdfdfgd fgkdfgsdklfhlasdb",
-                        "dfsdfsdsdf sfsd dsf ",
-                        "sdfsdfsdf sdf sdf sdf sdf fdgdfg",
-                        "sdfsdfsdfsdfdfgd fgkdfgsdklfhlasdb",
-                        "sdfsdfsdfsdfdfgd fgkdfgsdklfhlasdb",
-                        "dfsdfsdsdf sfsd dsf ",
-                        "sdfsdfsdf sdf sdf sdf sdf fdgdfg",
-                        "sdfsdfsdfsdfdfgd fgkdfgsdklfhlasdb",
-                        "dfsdfsdsdf sfsd dsf ",
-                        "sdfsdfsdf sdf sdf sdf sdf fdgdfg",
-                        "sdfsdfsdfsdfdfgd fgkdfgsdklfhlasdb",
-                      ]
-                          .map((e) => Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 14,
+                      children: _viewModel.getNotes
+                          .map((e) => GestureDetector(
+                                onTap: () {
+                                  Routemaster.of(context)
+                                      .push("${AppRoutes.editNote}/${e.docId}");
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 14,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.grey, width: 0.8),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Visibility(
+                                        visible: e.title.isNotEmpty,
+                                        child: Text(e.title,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge),
+                                      ),
+                                      Visibility(
+                                          visible: e.title.isNotEmpty,
+                                          child: const SizedBox(height: 12)),
+                                      Text(e.content,
+                                          maxLines: 5,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium),
+                                    ],
+                                  ),
                                 ),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.grey, width: 0.8),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(e),
                               ))
                           .toList(),
                     ),
@@ -125,7 +100,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 500),
-                top: showAppBar ? 0 : -200,
+                top: _viewModel.showAppBar ? 0 : -200,
                 curve: Curves.ease,
                 child: Container(
                   height: kToolbarHeight - 5,

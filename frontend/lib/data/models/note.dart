@@ -20,9 +20,8 @@ class NoteModel extends Equatable {
     required this.modifiedAt,
   });
 
-  factory NoteModel.fromJson(Map<String, dynamic> map, String docId) =>
-      NoteModel(
-        docId: docId,
+  factory NoteModel.fromJson(Map<String, dynamic> map) => NoteModel(
+        docId: map['\$id'],
         owner: map['owner'],
         priority: PriorityEnum.getPriorityEnumFromString(map['priority']),
         content: map['content'],

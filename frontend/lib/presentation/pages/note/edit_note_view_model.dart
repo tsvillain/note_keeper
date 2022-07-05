@@ -8,7 +8,7 @@ import 'package:note_keeper/data/models/note.dart';
 import 'package:note_keeper/data/repositories/respositories.dart';
 import 'package:note_keeper/presentation/base_view_model.dart';
 
-final _editNoteViewModel = ChangeNotifierProvider(
+final _editNoteViewModel = ChangeNotifierProvider.autoDispose(
     (ref) => EditNoteViewModel(ref.read(Repository.database)));
 
 mixin EditNoteView {}
@@ -16,7 +16,7 @@ mixin EditNoteView {}
 class EditNoteViewModel extends BaseViewModel<EditNoteView> {
   EditNoteViewModel(this._databaseRepository);
 
-  static ChangeNotifierProvider<EditNoteViewModel> get provider =>
+  static AutoDisposeChangeNotifierProvider<EditNoteViewModel> get provider =>
       _editNoteViewModel;
 
   final DatabaseRepository _databaseRepository;
@@ -24,7 +24,7 @@ class EditNoteViewModel extends BaseViewModel<EditNoteView> {
   final TextEditingController titleTextEditingController =
       TextEditingController();
 
-  late final QuillController richContentTextEditingController;
+  QuillController? richContentTextEditingController;
 
   bool isNewNote = false;
 
@@ -33,7 +33,7 @@ class EditNoteViewModel extends BaseViewModel<EditNoteView> {
   @override
   void dispose() {
     titleTextEditingController.dispose();
-    richContentTextEditingController.dispose();
+    richContentTextEditingController?.dispose();
     super.dispose();
   }
 
@@ -60,21 +60,35 @@ class EditNoteViewModel extends BaseViewModel<EditNoteView> {
     }
   }
 
+  bool _sameContent() {
+    return _existingNote?.title == titleTextEditingController.text &&
+        _existingNote?.content ==
+            jsonEncode(
+                richContentTextEditingController?.document.toDelta().toJson());
+  }
+
   /// Create a new Note or update the existing Note
+  /// TODO add check to not save doc is content is empty
   Future<void> saveNote() async {
-    if (isNewNote) {
-      await _databaseRepository.createNote(
-        title: titleTextEditingController.text,
-        content: jsonEncode(
-            richContentTextEditingController.document.toDelta().toJson()),
-      );
-    } else if (_existingNote != null) {
-      await _databaseRepository.updateNote(
-        docId: _existingNote!.docId!,
-        title: titleTextEditingController.text,
-        content: jsonEncode(
-            richContentTextEditingController.document.toDelta().toJson()),
-      );
+    try {
+      toggleLoadingOn(true);
+      if (isNewNote && _existingNote == null) {
+        await _databaseRepository.createNote(
+          title: titleTextEditingController.text,
+          content: jsonEncode(
+              richContentTextEditingController?.document.toDelta().toJson()),
+        );
+      } else if (_existingNote != null && !_sameContent()) {
+        await _databaseRepository.updateNote(
+          docId: _existingNote!.docId!,
+          title: titleTextEditingController.text,
+          content: jsonEncode(
+              richContentTextEditingController?.document.toDelta().toJson()),
+        );
+      }
+    } catch (_) {
+    } finally {
+      toggleLoadingOn(false);
     }
   }
 }

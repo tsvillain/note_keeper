@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:note_keeper/core/navigation/routes.dart';
 import 'package:note_keeper/presentation/pages/note/edit_note_view_model.dart';
 import 'package:note_keeper/presentation/pages/note/widgets/text_fields.dart';
 import 'package:routemaster/routemaster.dart';
@@ -29,12 +30,6 @@ class _EditNotePageState extends ConsumerState<EditNotePage> with EditNoteView {
   }
 
   @override
-  void dispose() {
-    _viewModel.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     ref.watch(EditNoteViewModel.provider);
     return Scaffold(
@@ -44,18 +39,19 @@ class _EditNotePageState extends ConsumerState<EditNotePage> with EditNoteView {
         leading: IconButton(
           onPressed: () async {
             if (!_viewModel.isLoading) {
-              await _viewModel
-                  .saveNote()
-                  .then((_) => Routemaster.of(context).pop());
+              _viewModel.saveNote().then((_) {
+                Routemaster.of(context).replace(AppRoutes.home);
+              });
             } else {
-              Routemaster.of(context).pop();
+              Routemaster.of(context).replace(AppRoutes.home);
             }
           },
           icon: const Icon(Icons.arrow_back),
         ),
       ),
       body: SafeArea(
-        child: _viewModel.isLoading
+        child: _viewModel.isLoading ||
+                _viewModel.richContentTextEditingController == null
             ? const Center(child: CircularProgressIndicator.adaptive())
             : Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -65,13 +61,14 @@ class _EditNotePageState extends ConsumerState<EditNotePage> with EditNoteView {
                         controller: _viewModel.titleTextEditingController),
                     Expanded(
                       child: RichContentTextField(
-                        controller: _viewModel.richContentTextEditingController,
+                        controller:
+                            _viewModel.richContentTextEditingController!,
                         focus: _viewModel.isNewNote,
                         write: true,
                       ),
                     ),
                     QuillToolbar.basic(
-                      controller: _viewModel.richContentTextEditingController,
+                      controller: _viewModel.richContentTextEditingController!,
                       multiRowsDisplay: false,
                       showAlignmentButtons: false,
                       showBackgroundColorButton: false,

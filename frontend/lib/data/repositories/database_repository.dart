@@ -62,6 +62,10 @@ class DatabaseRepository with RepositoryExceptionMixin {
     return exceptionHandler(_getNoteById(noteID: noteID));
   }
 
+  Future<List<NoteModel>> getNotesOfUser() async {
+    return exceptionHandler(_getAllNotesOfUser());
+  }
+
   //
 
   Future<void> _createDocument({required NoteModel note}) async {
@@ -86,6 +90,15 @@ class DatabaseRepository with RepositoryExceptionMixin {
       collectionId: CollectionNames.note,
       documentId: noteID,
     );
-    return NoteModel.fromJson(doc.data, noteID);
+    logger.info(doc.data);
+    return NoteModel.fromJson(doc.data);
+  }
+
+  Future<List<NoteModel>> _getAllNotesOfUser() async {
+    final DocumentList docs = await _database.listDocuments(
+      collectionId: CollectionNames.note,
+      queries: [Query.equal('owner', _authState.user!.$id)],
+    );
+    return docs.documents.map((e) => NoteModel.fromJson(e.data)).toList();
   }
 }
