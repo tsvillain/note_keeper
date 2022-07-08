@@ -1,16 +1,38 @@
-# note_keeper
+# Note Keeper
 
-A new Flutter project.
+A [Flutter](https://flutter.dev) + [AppWrite](https://appwrite.io) Project
 
-## Getting Started
+**Note Keeper** is a Note Creater App build with Flutter backed by AppWrite (An Open-Source Backend Server)
 
-This project is a starting point for a Flutter application.
+## 💡 Functionalities
 
-A few resources to get you started if this is your first Flutter project:
+- [x] Login and Register with Email and Password
+- [x] Create Note
+- [x] Edit Note
+- [x] Delete Created Note
+- [ ] Search Note
+- [ ]
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🚀 Installation
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📦 Packages
+
+Following packages are being used in this flutter app:
+
+| package                                                                             | useage                                                         |
+| ----------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| [appwrite](https://pub.dev/packages/appwrite)                                       | Official flutter package to use AppWrite                       |
+| [dartz](https://pub.dev/packages/dartz)                                             | Functional programming in Dart                                 |
+| [equatable](https://pub.dev/packages/equatable)                                     | To make comparsion of Model easy                               |
+| [flutter_dotenv](https://pub.dev/packages/flutter_dotenv)                           | Load configuration at runtime from a .env                      |
+| [flutter_quill](https://pub.dev/packages/flutter_quill)                             | Rich text editor                                               |
+| [flutter_riverpod](https://pub.dev/packages/flutter_riverpod)                       | State management library                                       |
+| [flutter_staggered_grid_view](https://pub.dev/packages/flutter_staggered_grid_view) | Provides a collection of Flutter grids layouts                 |
+| [logging](https://pub.dev/packages/logging)                                         | Create readable logs                                           |
+| [routemaster](https://pub.dev/packages/routemaster)                                 | Easy-to-use router for Flutter, which wraps over Navigator 2.0 |
+
+## 📘 License
+
+## 👨‍💻 Contributor
+
+Made by [Tekeshwar Singh](https://github.com/tsvillain)
