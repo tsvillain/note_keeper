@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:note_keeper/presentation/pages/home/home_page.dart';
+import 'package:note_keeper/presentation/pages/pages.dart';
 import 'package:routemaster/routemaster.dart';
-import 'package:note_keeper/presentation/pages/authentication/authentication.dart';
-import 'package:note_keeper/presentation/pages/note/note.dart';
 
 abstract class AppRoutes {
   static String get editNote => EditNotePage.routeName;
   static String get login => LoginPage.routeName;
   static String get register => RegisterPage.routeName;
   static String get home => HomePage.routeName;
+  static String get setting => SettingPage.routeName;
 }
 
 final routeLoggedOut = RouteMap(
@@ -29,5 +28,6 @@ final routeLoggedIn = RouteMap(
     },
     EditNotePage.routeName: (_) =>
         const MaterialPage(child: EditNotePage(noteId: null)),
+    SettingPage.routeName: (_) => const MaterialPage(child: SettingPage()),
   },
 );

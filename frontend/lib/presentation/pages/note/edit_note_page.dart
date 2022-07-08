@@ -7,7 +7,7 @@ import 'package:note_keeper/presentation/pages/note/widgets/text_fields.dart';
 import 'package:routemaster/routemaster.dart';
 
 class EditNotePage extends ConsumerStatefulWidget {
-  static const String routeName = "/editNotePage";
+  static const String routeName = "/edit_note";
   final String? noteId;
 
   const EditNotePage({Key? key, required this.noteId}) : super(key: key);
