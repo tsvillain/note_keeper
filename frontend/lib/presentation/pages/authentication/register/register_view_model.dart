@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/provider.dart';
 import 'package:note_keeper/core/state/state.dart';
 import 'package:note_keeper/data/models/app_error.dart';
-import 'package:note_keeper/data/repositories/respositories.dart';
+import 'package:note_keeper/data/repositories/respositories_impl.dart';
 import 'package:note_keeper/presentation/base_view_model.dart';
 
 final _registerViewModel = ChangeNotifierProvider((ref) => RegisterViewModel(
@@ -14,7 +14,7 @@ mixin RegisterView {
 }
 
 class RegisterViewModel extends BaseViewModel<RegisterView> {
-  final AuthRepository _auth;
+  final AuthRepositoryImpl _auth;
   final AuthService _authService;
 
   static ChangeNotifierProvider<RegisterViewModel> get provider =>

@@ -1,24 +1,24 @@
-import 'package:equatable/equatable.dart';
 import 'package:note_keeper/core/enum/enum.dart';
+import 'package:note_keeper/domain/entities/entities.dart';
 
-class NoteModel extends Equatable {
-  final String owner;
-  final PriorityEnum priority;
-  final String content;
-  final String title;
-  final int createdAt;
-  final int modifiedAt;
-  final String? docId;
-
+class NoteModel extends Note {
   const NoteModel({
-    this.docId,
-    required this.owner,
-    required this.priority,
-    required this.content,
-    required this.title,
-    required this.createdAt,
-    required this.modifiedAt,
-  });
+    required String owner,
+    required PriorityEnum priority,
+    required String content,
+    required String title,
+    required int createdAt,
+    required int modifiedAt,
+    String? docId,
+  }) : super(
+          content: content,
+          createdAt: createdAt,
+          modifiedAt: modifiedAt,
+          owner: owner,
+          priority: priority,
+          title: title,
+          docId: docId,
+        );
 
   factory NoteModel.fromJson(Map<String, dynamic> map) => NoteModel(
         docId: map['\$id'],
@@ -45,8 +45,4 @@ class NoteModel extends Equatable {
         "title": title,
         "modifiedAt": DateTime.now().millisecondsSinceEpoch,
       };
-
-  @override
-  List<Object?> get props =>
-      [owner, priority, content, title, createdAt, modifiedAt];
 }

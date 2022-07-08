@@ -6,21 +6,24 @@ import 'package:note_keeper/core/enum/enum.dart';
 import 'package:note_keeper/core/provider.dart';
 import 'package:note_keeper/core/state/state.dart';
 import 'package:note_keeper/data/models/models.dart';
-import 'package:note_keeper/data/repositories/respositories.dart';
+import 'package:note_keeper/data/repositories/respositories_impl.dart';
+import 'package:note_keeper/domain/repositories/repositories.dart';
 
-final _databaseRepositoryProvider = Provider<DatabaseRepository>((ref) =>
-    DatabaseRepository(
+final _databaseRepositoryProvider = Provider<DatabaseRepositoryImpl>((ref) =>
+    DatabaseRepositoryImpl(
         ref.read(BackendDependency.database), ref.watch(AppState.auth)));
 
-class DatabaseRepository with RepositoryExceptionMixin {
-  DatabaseRepository(this._database, this._authState);
+class DatabaseRepositoryImpl extends DatabaseRepository
+    with RepositoryExceptionMixin {
+  DatabaseRepositoryImpl(this._database, this._authState);
 
-  static Provider<DatabaseRepository> get provider =>
+  static Provider<DatabaseRepositoryImpl> get provider =>
       _databaseRepositoryProvider;
 
   final Database _database;
   final AuthState _authState;
 
+  @override
   Future<void> createNote({
     required String title,
     required String content,
@@ -37,6 +40,7 @@ class DatabaseRepository with RepositoryExceptionMixin {
     )));
   }
 
+  @override
   Future<void> updateNote({
     required String title,
     required String content,
@@ -58,15 +62,18 @@ class DatabaseRepository with RepositoryExceptionMixin {
     ));
   }
 
+  @override
   Future<NoteModel> getNoteByID({required String noteID}) async {
     return exceptionHandler(_getNoteById(noteID: noteID));
   }
 
+  @override
   Future<List<NoteModel>> getNotesOfUser() async {
     return exceptionHandler(_getAllNotesOfUser());
   }
 
-  Future<bool> deleteNoteById({required String noteID}) async {
+  @override
+  Future<bool> deleteNoteByID({required String noteID}) async {
     return exceptionHandler(_deleteNoteById(noteID: noteID));
   }
 

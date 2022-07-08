@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/provider.dart';
 import 'package:note_keeper/data/models/models.dart';
-import 'package:note_keeper/data/repositories/respositories.dart';
+import 'package:note_keeper/data/repositories/respositories_impl.dart';
 import 'package:note_keeper/presentation/base_view_model.dart';
 
 class HomeView {}
@@ -19,7 +19,7 @@ class HomeViewModel extends BaseViewModel<HomeView> {
   static AutoDisposeChangeNotifierProvider<HomeViewModel> get provider =>
       _homeViewModel;
 
-  final DatabaseRepository _databaseRepository;
+  final DatabaseRepositoryImpl _databaseRepository;
 
   final notesListScrollController = ScrollController();
   bool showAppBar = true;
@@ -67,7 +67,7 @@ class HomeViewModel extends BaseViewModel<HomeView> {
   void deleteNote(String noteId) async {
     try {
       toggleLoadingOn(true);
-      await _databaseRepository.deleteNoteById(noteID: noteId);
+      await _databaseRepository.deleteNoteByID(noteID: noteId);
       await _fetchNotes();
     } catch (_) {
     } finally {

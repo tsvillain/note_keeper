@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/provider.dart';
 import 'package:note_keeper/core/state/state.dart';
 import 'package:note_keeper/data/models/models.dart';
-import 'package:note_keeper/data/repositories/respositories.dart';
+import 'package:note_keeper/data/repositories/respositories_impl.dart';
 
 final _authServiceProvider = StateNotifierProvider<AuthService, AuthState>(
     (ref) => AuthService(ref.read(Repository.auth)));
 
 class AuthService extends StateNotifier<AuthState> {
-  final AuthRepository _authRepository;
+  final AuthRepositoryImpl _authRepository;
 
   static StateNotifierProvider<AuthService, AuthState> get provider =>
       _authServiceProvider;

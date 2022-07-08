@@ -2,7 +2,7 @@ import 'package:appwrite/appwrite.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/state/state.dart';
-import 'package:note_keeper/data/repositories/respositories.dart';
+import 'package:note_keeper/data/repositories/respositories_impl.dart';
 
 abstract class BackendDependency {
   static Provider<Client> get client => _clientProvider;
@@ -11,9 +11,9 @@ abstract class BackendDependency {
 }
 
 abstract class Repository {
-  static Provider<AuthRepository> get auth => AuthRepository.provider;
-  static Provider<DatabaseRepository> get database =>
-      DatabaseRepository.provider;
+  static Provider<AuthRepositoryImpl> get auth => AuthRepositoryImpl.provider;
+  static Provider<DatabaseRepositoryImpl> get database =>
+      DatabaseRepositoryImpl.provider;
 }
 
 abstract class AppState {

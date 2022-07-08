@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/provider.dart';
-import 'package:note_keeper/data/models/note.dart';
-import 'package:note_keeper/data/repositories/respositories.dart';
+import 'package:note_keeper/data/models/note_model.dart';
+import 'package:note_keeper/data/repositories/respositories_impl.dart';
 import 'package:note_keeper/presentation/base_view_model.dart';
 
 final _editNoteViewModel = ChangeNotifierProvider.autoDispose(
@@ -19,7 +19,7 @@ class EditNoteViewModel extends BaseViewModel<EditNoteView> {
   static AutoDisposeChangeNotifierProvider<EditNoteViewModel> get provider =>
       _editNoteViewModel;
 
-  final DatabaseRepository _databaseRepository;
+  final DatabaseRepositoryImpl _databaseRepository;
 
   final TextEditingController titleTextEditingController =
       TextEditingController();
