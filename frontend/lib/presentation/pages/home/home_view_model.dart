@@ -23,6 +23,8 @@ class HomeViewModel extends BaseViewModel<HomeView> {
 
   final notesListScrollController = ScrollController();
   bool showAppBar = true;
+  bool crossAxisCountTwo = true;
+  bool showDelete = false;
 
   List<NoteModel> _notes = [];
 
@@ -47,8 +49,29 @@ class HomeViewModel extends BaseViewModel<HomeView> {
     });
   }
 
-  void _fetchNotes() async {
+  void toggleCrossAxisCount() {
+    crossAxisCountTwo = !crossAxisCountTwo;
+    notifyListeners();
+  }
+
+  void toggleShowDelete({bool? v}) {
+    showDelete = v ?? !showDelete;
+    notifyListeners();
+  }
+
+  Future<void> _fetchNotes() async {
     _notes = await _databaseRepository.getNotesOfUser();
     notifyListeners();
+  }
+
+  void deleteNote(String noteId) async {
+    try {
+      toggleLoadingOn(true);
+      await _databaseRepository.deleteNoteById(noteID: noteId);
+      await _fetchNotes();
+    } catch (_) {
+    } finally {
+      toggleLoadingOn(false);
+    }
   }
 }

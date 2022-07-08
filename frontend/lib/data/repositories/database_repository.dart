@@ -66,6 +66,10 @@ class DatabaseRepository with RepositoryExceptionMixin {
     return exceptionHandler(_getAllNotesOfUser());
   }
 
+  Future<bool> deleteNoteById({required String noteID}) async {
+    return exceptionHandler(_deleteNoteById(noteID: noteID));
+  }
+
   //
 
   Future<void> _createDocument({required NoteModel note}) async {
@@ -83,6 +87,12 @@ class DatabaseRepository with RepositoryExceptionMixin {
       documentId: noteID,
       data: note.toJsonPatch(),
     );
+  }
+
+  Future<bool> _deleteNoteById({required String noteID}) async {
+    await _database.deleteDocument(
+        collectionId: CollectionNames.note, documentId: noteID);
+    return true;
   }
 
   Future<NoteModel> _getNoteById({required String noteID}) async {
