@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/provider.dart';
+import 'package:note_keeper/core/utils/messenger.dart';
 import 'package:note_keeper/data/models/models.dart';
 import 'package:note_keeper/data/repositories/respositories_impl.dart';
 import 'package:note_keeper/presentation/base_view_model.dart';
@@ -22,32 +22,13 @@ class HomeViewModel extends BaseViewModel<HomeView> {
   final DatabaseRepositoryImpl _databaseRepository;
 
   final notesListScrollController = ScrollController();
-  bool showAppBar = true;
+
   bool crossAxisCountTwo = true;
   bool showDelete = false;
 
   List<NoteModel> _notes = [];
 
   List<NoteModel> get getNotes => _notes;
-
-  void initialize() {
-    notesListScrollController.addListener(() {
-      if (notesListScrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        if (showAppBar != true) {
-          showAppBar = true;
-          notifyListeners();
-        }
-      } else if (notesListScrollController.position.userScrollDirection ==
-              ScrollDirection.reverse &&
-          notesListScrollController.offset > kToolbarHeight) {
-        if (showAppBar != false) {
-          showAppBar = false;
-          notifyListeners();
-        }
-      }
-    });
-  }
 
   void toggleCrossAxisCount() {
     crossAxisCountTwo = !crossAxisCountTwo;
@@ -68,8 +49,10 @@ class HomeViewModel extends BaseViewModel<HomeView> {
     try {
       toggleLoadingOn(true);
       await _databaseRepository.deleteNoteByID(noteID: noteId);
+      Messenger.showSnackbar("✅ Note Deleted");
       await _fetchNotes();
     } catch (_) {
+      Messenger.showSnackbar("🚨 Failed to Delete Note");
     } finally {
       toggleLoadingOn(false);
     }

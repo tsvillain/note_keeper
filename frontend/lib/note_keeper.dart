@@ -9,6 +9,8 @@ final _isAuthenticateProvider =
 final _isAuthLoading =
     Provider<bool>((ref) => ref.watch(AppState.auth).isLoading);
 
+final globalScaffold = GlobalKey<ScaffoldMessengerState>();
+
 class NoteKeeper extends ConsumerStatefulWidget {
   const NoteKeeper({Key? key}) : super(key: key);
 
@@ -25,6 +27,7 @@ class _NoteKeeperState extends ConsumerState<NoteKeeper> {
     }
 
     return MaterialApp.router(
+      scaffoldMessengerKey: globalScaffold,
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark(),
       routeInformationParser: const RoutemasterParser(),

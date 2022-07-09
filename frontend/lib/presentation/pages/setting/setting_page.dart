@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/navigation/routes.dart';
+import 'package:note_keeper/core/utils/messenger.dart';
 import 'package:note_keeper/presentation/pages/setting/setting_view_model.dart';
 import 'package:routemaster/routemaster.dart';
 
@@ -49,7 +50,8 @@ class _SettingViewState extends ConsumerState<SettingPage> with SettingView {
                         title: const Text("Theme"),
                         trailing: const Text("System default"),
                         onTap: () {
-                          // TODO snack bar "Not yet implemented"
+                          // TODO "Not yet implemented"
+                          Messenger.showSnackbar("Not yet Implemented");
                         },
                       ),
                     ],
@@ -57,8 +59,8 @@ class _SettingViewState extends ConsumerState<SettingPage> with SettingView {
                   ListTile(
                     title: const Text("Log Out"),
                     leading: const Icon(Icons.logout),
-                    onTap: () {
-                      // TODO logout user
+                    onTap: () async {
+                      await _viewModel.logout();
                     },
                   )
                 ],

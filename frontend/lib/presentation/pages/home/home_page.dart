@@ -1,13 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:note_keeper/core/navigation/routes.dart';
+import 'package:note_keeper/core/utils/messenger.dart';
 import 'package:note_keeper/data/models/models.dart';
 import 'package:note_keeper/presentation/pages/home/home_view_model.dart';
-import 'package:note_keeper/presentation/pages/home/widgets/custom_search_app_bar.dart';
-import 'package:note_keeper/presentation/pages/home/widgets/note_preview.dart';
+import 'package:note_keeper/presentation/pages/home/widgets/custom_search_bar.dart';
+import 'package:note_keeper/presentation/pages/widgets/note_preview.dart';
 import 'package:routemaster/routemaster.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -25,7 +24,6 @@ class _HomePageState extends ConsumerState<HomePage> with HomeView {
   void initState() {
     _viewModel = ref.read(HomeViewModel.provider);
     _viewModel.attachView(this);
-    _viewModel.initialize();
     super.initState();
   }
 
@@ -60,11 +58,12 @@ class _HomePageState extends ConsumerState<HomePage> with HomeView {
                                 child: const Text("NO")),
                           ],
                         ));
-                log("Accepted:: ${v.toJson()}");
+                // log("Accepted:: ${v.toJson()}");
               },
               onLeave: (v) {
-                // TODO
-                // show snackbar alert "Drop the Note in Delete Section to Delete!"
+                // log("Drop the Note");
+                Messenger.showSnackbar(
+                    "Drop the Note in Delete Section to Delete!");
               },
               builder: (_, data, ___) {
                 return FloatingActionButton.extended(
@@ -83,6 +82,7 @@ class _HomePageState extends ConsumerState<HomePage> with HomeView {
                   const Spacer(),
                   FloatingActionButton(
                     onPressed: () {
+                      Messenger.showSnackbar("Hello");
                       Routemaster.of(context).push(AppRoutes.editNote);
                     },
                     tooltip: "Add new note",

@@ -2,17 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/provider.dart';
 import 'package:note_keeper/core/state/state.dart';
-import 'package:note_keeper/data/models/app_error.dart';
+import 'package:note_keeper/core/utils/messenger.dart';
 import 'package:note_keeper/data/repositories/respositories_impl.dart';
 import 'package:note_keeper/presentation/base_view_model.dart';
 
 final _loginViewModel = ChangeNotifierProvider((ref) => LoginViewModel(
     ref.read(Repository.auth), ref.read(AppState.auth.notifier)));
 
-mixin LoginView {
-  //TODO:[tekeshwar] Add global snackbar to show this type of message / error
-  void showError(AppError error);
-}
+mixin LoginView {}
 
 class LoginViewModel extends BaseViewModel<LoginView> {
   final AuthRepositoryImpl _auth;
@@ -41,7 +38,7 @@ class LoginViewModel extends BaseViewModel<LoginView> {
       final user = await _auth.get();
       _authService.setUser(user);
     } on RepositoryException catch (e) {
-      view!.showError(AppError(message: e.message));
+      Messenger.showSnackbar(e.message);
     } finally {
       toggleLoadingOn(false);
     }

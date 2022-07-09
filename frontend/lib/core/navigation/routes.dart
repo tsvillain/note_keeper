@@ -8,6 +8,7 @@ abstract class AppRoutes {
   static String get register => RegisterPage.routeName;
   static String get home => HomePage.routeName;
   static String get setting => SettingPage.routeName;
+  static String get search => SearchPage.routeName;
 }
 
 final routeLoggedOut = RouteMap(
@@ -29,5 +30,6 @@ final routeLoggedIn = RouteMap(
     EditNotePage.routeName: (_) =>
         const MaterialPage(child: EditNotePage(noteId: null)),
     SettingPage.routeName: (_) => const MaterialPage(child: SettingPage()),
+    SearchPage.routeName: (_) => const MaterialPage(child: SearchPage()),
   },
 );
