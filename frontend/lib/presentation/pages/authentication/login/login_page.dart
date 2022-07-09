@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/navigation/routes.dart';
-import 'package:note_keeper/data/models/app_error.dart';
 import 'package:note_keeper/presentation/pages/authentication/login/login_view_model.dart';
 import 'package:note_keeper/presentation/pages/authentication/widgets/text_field.dart';
 import 'package:routemaster/routemaster.dart';

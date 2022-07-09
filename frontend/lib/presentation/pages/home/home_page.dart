@@ -82,7 +82,6 @@ class _HomePageState extends ConsumerState<HomePage> with HomeView {
                   const Spacer(),
                   FloatingActionButton(
                     onPressed: () {
-                      Messenger.showSnackbar("Hello");
                       Routemaster.of(context).push(AppRoutes.editNote);
                     },
                     tooltip: "Add new note",
