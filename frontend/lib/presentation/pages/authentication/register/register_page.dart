@@ -36,58 +36,68 @@ class _RegisterPageState extends ConsumerState<RegisterPage> with RegisterView {
   Widget build(BuildContext context) {
     ref.watch(RegisterViewModel.provider);
     return Scaffold(
-      body: _viewModel.isLoading
-          ? const Center(child: CircularProgressIndicator.adaptive())
-          : Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints.loose(const Size.fromWidth(300)),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Text("Welcome to Note Keeper",
-                                style: Theme.of(context).textTheme.headline5),
-                          ),
+      body: SafeArea(
+          child: _viewModel.isLoading
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints.loose(const Size.fromWidth(300)),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: Text("Welcome to Note Keeper",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5),
+                                ),
+                              ),
+                            ),
+                            NameTextField(controller: _viewModel.nameContoller),
+                            EmailTextField(
+                                controller: _viewModel.emailContoller),
+                            PasswordTextField(
+                                controller: _viewModel.passwordContoller),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: ElevatedButton(
+                                onPressed: _signUp,
+                                child: const Text('Join'),
+                              ),
+                            ),
+                            const Spacer(),
+                            Text.rich(
+                              TextSpan(
+                                  text: 'Already have an account? ',
+                                  children: [
+                                    TextSpan(
+                                      text: 'LogIn',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => Routemaster.of(context)
+                                            .push(AppRoutes.login),
+                                    )
+                                  ]),
+                            )
+                          ],
                         ),
-                        NameTextField(controller: _viewModel.nameContoller),
-                        EmailTextField(controller: _viewModel.emailContoller),
-                        PasswordTextField(
-                            controller: _viewModel.passwordContoller),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: ElevatedButton(
-                            onPressed: _signUp,
-                            child: const Text('Join'),
-                          ),
-                        ),
-                        Text.rich(
-                          TextSpan(
-                              text: 'Already have an account? ',
-                              children: [
-                                TextSpan(
-                                  text: 'LogIn',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () => Routemaster.of(context)
-                                        .push(AppRoutes.login),
-                                )
-                              ]),
-                        )
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
+                )),
     );
   }
 

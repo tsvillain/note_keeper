@@ -36,61 +36,67 @@ class _LoginPageState extends ConsumerState<LoginPage> with LoginView {
   Widget build(BuildContext context) {
     ref.watch(LoginViewModel.provider);
     return Scaffold(
-      body: _viewModel.isLoading
-          ? const Center(child: CircularProgressIndicator.adaptive())
-          : Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints.loose(const Size.fromWidth(300)),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Text("Welcome Back! to Note Keeper",
-                                style: Theme.of(context).textTheme.headline5),
-                          ),
-                        ),
-                        EmailTextField(controller: _viewModel.emailContoller),
-                        PasswordTextField(
-                            controller: _viewModel.passwordContoller),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: ElevatedButton(
-                            onPressed: _signIn,
-                            child: const Text('Sign In'),
-                          ),
-                        ),
-                        Text.rich(
-                          TextSpan(text: 'Don\'t have an account? ', children: [
-                            TextSpan(
-                              text: 'Join Now',
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () => Routemaster.of(context)
-                                    .push(AppRoutes.register),
+      body: SafeArea(
+          child: _viewModel.isLoading
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints.loose(const Size.fromWidth(300)),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: Text("Welcome Back! to Note Keeper",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5),
+                                ),
+                              ),
+                            ),
+                            EmailTextField(
+                                controller: _viewModel.emailContoller),
+                            PasswordTextField(
+                                controller: _viewModel.passwordContoller),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: ElevatedButton(
+                                onPressed: _signIn,
+                                child: const Text('Sign In'),
+                              ),
+                            ),
+                            const Spacer(),
+                            Text.rich(
+                              TextSpan(
+                                  text: 'Don\'t have an account? ',
+                                  children: [
+                                    TextSpan(
+                                      text: 'Join Now',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => Routemaster.of(context)
+                                            .push(AppRoutes.register),
+                                    )
+                                  ]),
                             )
-                          ]),
-                        )
-                      ],
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
+                )),
     );
-  }
-
-  @override
-  void showError(AppError error) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(error.message)));
   }
 }
