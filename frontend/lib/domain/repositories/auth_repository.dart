@@ -1,7 +1,9 @@
 import 'package:appwrite/models.dart';
+import 'package:appwrite/appwrite.dart' as aw;
 
 abstract class AuthRepository {
-  Future<User> create({
+  Future<aw.Account> create({
+    required String userId,
     required String email,
     required String password,
     required String name,
@@ -13,5 +15,5 @@ abstract class AuthRepository {
 
   Future<void> deleteSession({required String sessionId});
 
-  Future<User> get();
+  Future<Account> getAccount();
 }

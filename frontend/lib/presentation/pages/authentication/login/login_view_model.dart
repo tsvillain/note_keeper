@@ -1,4 +1,6 @@
+import 'package:appwrite/models.dart' as awm show Account;
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/provider.dart';
 import 'package:note_keeper/core/state/state.dart';
@@ -8,6 +10,10 @@ import 'package:note_keeper/presentation/base_view_model.dart';
 
 final _loginViewModel = ChangeNotifierProvider((ref) => LoginViewModel(
     ref.read(Repository.auth), ref.read(AppState.auth.notifier)));
+final _authRepositoryProvider =
+    Provider<AuthRepositoryImpl>((ref) => AuthRepositoryImpl(
+          ref.read(BackendDependency.account),
+        ));
 
 mixin LoginView {}
 
@@ -32,11 +38,28 @@ class LoginViewModel extends BaseViewModel<LoginView> {
   Future<void> createSession() async {
     try {
       toggleLoadingOn(true);
+
+      // from master repo
       await _auth.createSession(
           email: emailContoller.text, password: passwordContoller.text);
-
-      final user = await _auth.get();
+      late final awm.Account user;
+      await _auth.getAccount().then((value) => user = value);
       _authService.setUser(user);
+      _authService.refresh();
+      //
+      /*   await _auth
+          .createSession(
+              email: emailContoller.text, password: passwordContoller.text)
+          .then((value) async {
+        late final awm.Account user;
+
+        _auth.getAccount().then((value) => user = value as awm.Account);
+
+        // _authService.setUser(user);
+        _authService.state.copyWith(user: user, isLoading: false);
+      });
+ */
+      // await _auth.getAccount().then((value) => _authService.setUser(value));
     } on RepositoryException catch (e) {
       Messenger.showSnackbar(e.message);
     } finally {

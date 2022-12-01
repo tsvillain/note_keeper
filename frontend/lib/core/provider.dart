@@ -1,12 +1,12 @@
 import 'package:appwrite/appwrite.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/state/state.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:note_keeper/data/repositories/respositories_impl.dart';
 
 abstract class BackendDependency {
   static Provider<Client> get client => _clientProvider;
-  static Provider<Database> get database => _databaseProvider;
+  static Provider<Databases> get database => _databaseProvider;
   static Provider<Account> get account => _accountProvider;
 }
 
@@ -28,7 +28,7 @@ final _clientProvider = Provider<Client>(
 );
 
 final _databaseProvider =
-    Provider<Database>((ref) => Database(ref.read(_clientProvider)));
+    Provider<Databases>((ref) => Databases(ref.read(_clientProvider)));
 
 final _accountProvider =
     Provider<Account>((ref) => Account(ref.read(_clientProvider)));
