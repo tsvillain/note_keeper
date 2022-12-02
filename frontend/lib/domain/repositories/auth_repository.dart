@@ -15,5 +15,5 @@ abstract class AuthRepository {
 
   Future<void> deleteSession({required String sessionId});
 
-  Future<Account> getAccount();
+  Future<Account> get();
 }

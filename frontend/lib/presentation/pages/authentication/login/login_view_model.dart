@@ -1,4 +1,3 @@
-import 'package:appwrite/models.dart' as awm show Account;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,27 +38,11 @@ class LoginViewModel extends BaseViewModel<LoginView> {
     try {
       toggleLoadingOn(true);
 
-      // from master repo
       await _auth.createSession(
           email: emailContoller.text, password: passwordContoller.text);
-      late final awm.Account user;
-      await _auth.getAccount().then((value) => user = value);
-      _authService.setUser(user);
-      _authService.refresh();
-      //
-      /*   await _auth
-          .createSession(
-              email: emailContoller.text, password: passwordContoller.text)
-          .then((value) async {
-        late final awm.Account user;
 
-        _auth.getAccount().then((value) => user = value as awm.Account);
-
-        // _authService.setUser(user);
-        _authService.state.copyWith(user: user, isLoading: false);
-      });
- */
-      // await _auth.getAccount().then((value) => _authService.setUser(value));
+      await _authService.refresh();
+      toggleLoadingOn(false);
     } on RepositoryException catch (e) {
       Messenger.showSnackbar(e.message);
     } finally {

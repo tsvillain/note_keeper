@@ -1,5 +1,4 @@
-import 'package:appwrite/models.dart' as awm show Account;
-
+import 'package:appwrite/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/provider.dart';
 import 'package:note_keeper/core/state/state.dart';
@@ -17,13 +16,10 @@ class AuthService extends StateNotifier<AuthState> {
       _authServiceProvider;
 
   AuthService(this._authRepository, this.ref)
-      //this had true on loading
-      : super(const AuthState.unauthenticated(isLoading: false)) {
-    // refresh was enable
-    // state = state.copyWith(isLoading: true);
-    // if (state.isAuthenticated) {
+      // Trigger the loading state
+      : super(const AuthState.unauthenticated(isLoading: true)) {
     refresh();
-    // }
+    state = state.copyWith(isLoading: false);
   }
 
   Future<void> refresh() async {
@@ -31,31 +27,14 @@ class AuthService extends StateNotifier<AuthState> {
     try {
       final user = await ref.read(BackendDependency.account).get();
       setUser(user);
-      state.copyWith(isLoading: false);
     } on RepositoryException catch (_) {
       // logger.info('Not authenticated');
-      state = const AuthState.unauthenticated();
+      state = state.copyWith(user: null, isLoading: false);
     }
-    //
-    /*  try {
-
-      late dynamic user;
-      //?fixed this throws
-      // user = await _authRepository.getAccount();
-      user = await ref.read(BackendDependency.account).get();
-      if (user != null) {
-        setUser(user);
-      }
-    } on RepositoryException catch (_) {
-      // logger.info('Not authenticated');
-      state = const AuthState.unauthenticated();
-    } */
   }
 
-  void setUser(awm.Account user) {
-    print(user.name);
-    // logger.info('Authentication successful, setting $user');
-    state = state.copyWith(user: user, isLoading: false);
+  void setUser(Account user) {
+    state = state.copyWith(isLoading: false, user: user);
   }
 
   Future<void> signOut() async {
@@ -70,7 +49,7 @@ class AuthService extends StateNotifier<AuthState> {
 }
 
 class AuthState extends StateBase {
-  final awm.Account? user;
+  final Account? user;
   final bool isLoading;
 
   const AuthState({
@@ -89,7 +68,7 @@ class AuthState extends StateBase {
   List<Object?> get props => [user, isLoading, error];
 
   AuthState copyWith({
-    awm.Account? user,
+    Account? user,
     bool? isLoading,
     AppError? error,
   }) =>

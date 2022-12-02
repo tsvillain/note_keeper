@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:appwrite/models.dart' as awm show Account;
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/provider.dart';
 import 'package:note_keeper/core/state/state.dart';
@@ -49,8 +47,8 @@ class RegisterViewModel extends BaseViewModel<RegisterView> {
       await _auth.createSession(
           email: emailContoller.text, password: passwordContoller.text);
 
-      final user = await _auth.getAccount();
-      _authService.setUser(user as awm.Account);
+      final user = await _auth.get();
+      _authService.setUser(user);
     } on RepositoryException catch (e) {
       view!.showError(AppError(message: e.message));
     } finally {
