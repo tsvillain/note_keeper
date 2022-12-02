@@ -27,6 +27,7 @@ class _NoteKeeperState extends ConsumerState<NoteKeeper> {
     }
 
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: globalScaffold,
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark(),

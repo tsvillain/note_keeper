@@ -16,7 +16,6 @@ class AuthService extends StateNotifier<AuthState> {
       _authServiceProvider;
 
   AuthService(this._authRepository, this.ref)
-      // Trigger the loading state
       : super(const AuthState.unauthenticated(isLoading: true)) {
     refresh();
     state = state.copyWith(isLoading: false);

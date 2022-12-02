@@ -13,11 +13,6 @@ final _databaseRepositoryProvider = Provider<DatabaseRepositoryImpl>((ref) =>
     DatabaseRepositoryImpl(
         ref.read(BackendDependency.database), ref.watch(AppState.auth), ref));
 
-final _authRepositoryProvider =
-    Provider<AuthRepositoryImpl>((ref) => AuthRepositoryImpl(
-          ref.read(BackendDependency.account),
-        ));
-
 class DatabaseRepositoryImpl extends DatabaseRepository
     with RepositoryExceptionMixin {
   /// Private constructor
@@ -32,7 +27,7 @@ class DatabaseRepositoryImpl extends DatabaseRepository
   final Databases _database;
   final AuthState _authState;
 
-  final String databaseId = '6386c75dd5062d7a8887';
+  final String databaseId = CollectionNames.databaseId;
 
   @override
   Future<void> createNote({
