@@ -26,16 +26,20 @@ class _NoteKeeperState extends ConsumerState<NoteKeeper> {
       return Container();
     }
 
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      scaffoldMessengerKey: globalScaffold,
-      themeMode: ThemeMode.dark,
-      darkTheme: ThemeData.dark(),
-      routeInformationParser: const RoutemasterParser(),
-      routerDelegate: RoutemasterDelegate(routesBuilder: (context) {
-        final isAuthenticated = ref.watch(_isAuthenticateProvider);
-        return isAuthenticated ? routeLoggedIn : routeLoggedOut;
-      }),
+    return GestureDetector(
+      /// hide keyboard when tapping outside of the input fields.
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        scaffoldMessengerKey: globalScaffold,
+        themeMode: ThemeMode.dark,
+        darkTheme: ThemeData.dark(),
+        routeInformationParser: const RoutemasterParser(),
+        routerDelegate: RoutemasterDelegate(routesBuilder: (context) {
+          final isAuthenticated = ref.watch(_isAuthenticateProvider);
+          return isAuthenticated ? routeLoggedIn : routeLoggedOut;
+        }),
+      ),
     );
   }
 }
