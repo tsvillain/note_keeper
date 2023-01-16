@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_keeper/presentation/pages/pages.dart';
+import 'package:note_keeper/presentation/pages/profile/profile_page.dart';
 import 'package:routemaster/routemaster.dart';
 
 abstract class AppRoutes {
@@ -9,6 +10,7 @@ abstract class AppRoutes {
   static String get home => HomePage.routeName;
   static String get setting => SettingPage.routeName;
   static String get search => SearchPage.routeName;
+  static String get profile => ProfilePage.routeName;
 }
 
 final routeLoggedOut = RouteMap(
@@ -31,5 +33,6 @@ final routeLoggedIn = RouteMap(
         const MaterialPage(child: EditNotePage(noteId: null)),
     SettingPage.routeName: (_) => const MaterialPage(child: SettingPage()),
     SearchPage.routeName: (_) => const MaterialPage(child: SearchPage()),
+    ProfilePage.routeName: (_) => const MaterialPage(child: ProfilePage())
   },
 );

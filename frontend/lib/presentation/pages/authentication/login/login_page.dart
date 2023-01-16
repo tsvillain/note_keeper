@@ -1,20 +1,10 @@
-import 'package:appwrite/appwrite.dart';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/navigation/routes.dart';
-import 'package:note_keeper/core/provider.dart';
-import 'package:note_keeper/core/state/state.dart';
 import 'package:note_keeper/presentation/pages/authentication/login/login_view_model.dart';
 import 'package:note_keeper/presentation/pages/authentication/widgets/text_field.dart';
 import 'package:routemaster/routemaster.dart';
-
-final _authProvider =
-    Provider<Account>((ref) => Account(ref.read(BackendDependency.client)));
-
-final _authServiceProvider = StateNotifierProvider<AuthService, AuthState>(
-    (ref) => AuthService(ref.read(Repository.auth), ref));
 
 class LoginPage extends ConsumerStatefulWidget {
   static const String routeName = "/login";
@@ -70,7 +60,7 @@ class _LoginPageState extends ConsumerState<LoginPage> with LoginView {
                                   child: Text("Welcome Back! to Note Keeper",
                                       style: Theme.of(context)
                                           .textTheme
-                                          .headline5),
+                                          .headlineSmall),
                                 ),
                               ),
                             ),

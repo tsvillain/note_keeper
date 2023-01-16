@@ -9,10 +9,6 @@ import 'package:note_keeper/presentation/base_view_model.dart';
 
 final _loginViewModel = ChangeNotifierProvider((ref) => LoginViewModel(
     ref.read(Repository.auth), ref.read(AppState.auth.notifier)));
-final _authRepositoryProvider =
-    Provider<AuthRepositoryImpl>((ref) => AuthRepositoryImpl(
-          ref.read(BackendDependency.account),
-        ));
 
 mixin LoginView {}
 

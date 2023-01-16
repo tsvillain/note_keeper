@@ -43,7 +43,7 @@ class CustomSearchBar extends ConsumerWidget {
                       ? const FaIcon(FontAwesomeIcons.gripVertical)
                       : const FaIcon(FontAwesomeIcons.gripLines)),
               GestureDetector(
-                  onTap: () => Routemaster.of(context).push(AppRoutes.setting),
+                  onTap: () => Routemaster.of(context).push(AppRoutes.profile),
                   child: const CircleAvatar(child: Icon(Icons.person_outline))),
               const SizedBox(width: 8),
             ],

@@ -35,16 +35,7 @@ class AuthRepositoryImpl extends AuthRepository with RepositoryExceptionMixin {
 
   @override
   Future<awm.Account> get() {
-    _account.get().then((value) => exceptionHandler(value));
-    try {
-      _account.get().then((value) {
-        return value;
-      });
-    } on AppwriteException catch (_) {
-      rethrow;
-    }
-    throw ('App eror getting account');
-    // return exceptionHandler(_account.get());
+    return (exceptionHandler(_account.get()));
   }
 
   @override

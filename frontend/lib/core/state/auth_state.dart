@@ -22,9 +22,8 @@ class AuthService extends StateNotifier<AuthState> {
   }
 
   Future<void> refresh() async {
-    // from master repo
     try {
-      final user = await ref.read(BackendDependency.account).get();
+      final user = await _authRepository.get();
       setUser(user);
     } on RepositoryException catch (_) {
       // logger.info('Not authenticated');
