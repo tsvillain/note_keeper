@@ -6,16 +6,15 @@ import 'package:note_keeper/data/models/models.dart';
 import 'package:note_keeper/data/repositories/respositories_impl.dart';
 
 final _authServiceProvider = StateNotifierProvider<AuthService, AuthState>(
-    (ref) => AuthService(ref.read(Repository.auth), ref));
+    (ref) => AuthService(ref.read(Repository.auth)));
 
 class AuthService extends StateNotifier<AuthState> {
   final AuthRepositoryImpl _authRepository;
-  final Ref ref;
 
   static StateNotifierProvider<AuthService, AuthState> get provider =>
       _authServiceProvider;
 
-  AuthService(this._authRepository, this.ref)
+  AuthService(this._authRepository)
       : super(const AuthState.unauthenticated(isLoading: true)) {
     refresh();
     state = state.copyWith(isLoading: false);

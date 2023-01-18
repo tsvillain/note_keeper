@@ -11,19 +11,18 @@ import 'package:note_keeper/domain/repositories/repositories.dart';
 
 final _databaseRepositoryProvider = Provider<DatabaseRepositoryImpl>((ref) =>
     DatabaseRepositoryImpl(
-        ref.read(BackendDependency.database), ref.watch(AppState.auth), ref));
+        ref.read(BackendDependency.database), ref.watch(AppState.auth)));
 
 class DatabaseRepositoryImpl extends DatabaseRepository
     with RepositoryExceptionMixin {
   /// Private constructor
 
   //below is the working constructor. but needs to have user Id as field
-  DatabaseRepositoryImpl(this._database, this._authState, this.ref);
+  DatabaseRepositoryImpl(this._database, this._authState);
   String get userId => _authState.user!.$id;
 
   static Provider<DatabaseRepositoryImpl> get provider =>
       _databaseRepositoryProvider;
-  final Ref ref;
   final Databases _database;
   final AuthState _authState;
 
