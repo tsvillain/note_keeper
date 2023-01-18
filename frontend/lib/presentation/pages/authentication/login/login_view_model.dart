@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_keeper/core/provider.dart';
 import 'package:note_keeper/core/state/state.dart';
@@ -32,11 +33,12 @@ class LoginViewModel extends BaseViewModel<LoginView> {
   Future<void> createSession() async {
     try {
       toggleLoadingOn(true);
+
       await _auth.createSession(
           email: emailContoller.text, password: passwordContoller.text);
 
-      final user = await _auth.get();
-      _authService.setUser(user);
+      await _authService.refresh();
+      toggleLoadingOn(false);
     } on RepositoryException catch (e) {
       Messenger.showSnackbar(e.message);
     } finally {

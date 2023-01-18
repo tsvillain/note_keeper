@@ -17,6 +17,7 @@ class AuthService extends StateNotifier<AuthState> {
   AuthService(this._authRepository)
       : super(const AuthState.unauthenticated(isLoading: true)) {
     refresh();
+    state = state.copyWith(isLoading: false);
   }
 
   Future<void> refresh() async {
@@ -25,13 +26,12 @@ class AuthService extends StateNotifier<AuthState> {
       setUser(user);
     } on RepositoryException catch (_) {
       // logger.info('Not authenticated');
-      state = const AuthState.unauthenticated();
+      state = state.copyWith(user: null, isLoading: false);
     }
   }
 
-  void setUser(User user) {
-    // logger.info('Authentication successful, setting $user');
-    state = state.copyWith(user: user, isLoading: false);
+  void setUser(Account user) {
+    state = state.copyWith(isLoading: false, user: user);
   }
 
   Future<void> signOut() async {
@@ -46,7 +46,7 @@ class AuthService extends StateNotifier<AuthState> {
 }
 
 class AuthState extends StateBase {
-  final User? user;
+  final Account? user;
   final bool isLoading;
 
   const AuthState({
@@ -65,7 +65,7 @@ class AuthState extends StateBase {
   List<Object?> get props => [user, isLoading, error];
 
   AuthState copyWith({
-    User? user,
+    Account? user,
     bool? isLoading,
     AppError? error,
   }) =>

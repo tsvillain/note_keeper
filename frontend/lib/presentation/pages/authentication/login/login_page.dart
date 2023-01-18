@@ -60,7 +60,7 @@ class _LoginPageState extends ConsumerState<LoginPage> with LoginView {
                                   child: Text("Welcome Back! to Note Keeper",
                                       style: Theme.of(context)
                                           .textTheme
-                                          .headline5),
+                                          .headlineSmall),
                                 ),
                               ),
                             ),
@@ -71,8 +71,12 @@ class _LoginPageState extends ConsumerState<LoginPage> with LoginView {
                             Padding(
                               padding: const EdgeInsets.all(8),
                               child: ElevatedButton(
-                                onPressed: _signIn,
-                                child: const Text('Sign In'),
+                                onPressed: () {
+                                  //*Bix fix. Material app was not reading the Appsate.auth change in [user]
+                                  //The parenthesis from the call below was missing and the call was not triggering. Whoops.
+                                  _signIn();
+                                },
+                                child: const Text('Sign In?'),
                               ),
                             ),
                             const Spacer(),

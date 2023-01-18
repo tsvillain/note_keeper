@@ -15,13 +15,18 @@ final _databaseRepositoryProvider = Provider<DatabaseRepositoryImpl>((ref) =>
 
 class DatabaseRepositoryImpl extends DatabaseRepository
     with RepositoryExceptionMixin {
+  /// Private constructor
+
+  //below is the working constructor. but needs to have user Id as field
   DatabaseRepositoryImpl(this._database, this._authState);
+  String get userId => _authState.user!.$id;
 
   static Provider<DatabaseRepositoryImpl> get provider =>
       _databaseRepositoryProvider;
-
-  final Database _database;
+  final Databases _database;
   final AuthState _authState;
+
+  final String databaseId = CollectionNames.databaseId;
 
   @override
   Future<void> createNote({
@@ -29,9 +34,12 @@ class DatabaseRepositoryImpl extends DatabaseRepository
     required String content,
     PriorityEnum priority = PriorityEnum.low,
   }) async {
+    // late final String myUserId;
+    // await _authState.user.$id !.get().then((value) => myUserId = value.$id);
+
     return exceptionHandler(_createDocument(
         note: NoteModel(
-      owner: _authState.user!.$id,
+      owner: userId,
       priority: priority,
       content: content,
       title: title,
@@ -49,7 +57,7 @@ class DatabaseRepositoryImpl extends DatabaseRepository
   }) async {
     return exceptionHandler(_updateDocument(
       note: NoteModel(
-        owner: _authState.user!.$id,
+        owner: userId,
         priority: priority,
         content: content,
         title: title,
@@ -81,29 +89,43 @@ class DatabaseRepositoryImpl extends DatabaseRepository
 
   Future<void> _createDocument({required NoteModel note}) async {
     await _database.createDocument(
+      databaseId: databaseId,
       collectionId: CollectionNames.note,
-      documentId: 'unique()',
+      documentId: ID.unique(),
       data: note.toJson(),
+      permissions: [
+        Permission.read(Role.users()),
+        Permission.update(Role.user(userId)),
+        Permission.delete(Role.user(userId)),
+      ],
     );
   }
 
   Future<void> _updateDocument(
       {required NoteModel note, required String noteID}) async {
     await _database.updateDocument(
+      databaseId: databaseId,
       collectionId: CollectionNames.note,
       documentId: noteID,
       data: note.toJsonPatch(),
+      permissions: [
+        Permission.read(Role.users()),
+        Permission.update(Role.user(userId)),
+      ],
     );
   }
 
   Future<bool> _deleteNoteById({required String noteID}) async {
     await _database.deleteDocument(
-        collectionId: CollectionNames.note, documentId: noteID);
+        databaseId: databaseId,
+        collectionId: CollectionNames.note,
+        documentId: noteID);
     return true;
   }
 
   Future<NoteModel> _getNoteById({required String noteID}) async {
     final Document doc = await _database.getDocument(
+      databaseId: databaseId,
       collectionId: CollectionNames.note,
       documentId: noteID,
     );
@@ -113,6 +135,7 @@ class DatabaseRepositoryImpl extends DatabaseRepository
 
   Future<List<NoteModel>> _getAllNotesOfUser() async {
     final DocumentList docs = await _database.listDocuments(
+      databaseId: databaseId,
       collectionId: CollectionNames.note,
       queries: [Query.equal('owner', _authState.user!.$id)],
     );

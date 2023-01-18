@@ -29,9 +29,7 @@ class _SettingViewState extends ConsumerState<SettingPage> with SettingView {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {
-            Routemaster.of(context).replace(AppRoutes.home);
-          },
+          onPressed: () => Routemaster.of(context).replace(AppRoutes.profile),
           icon: const Icon(Icons.arrow_back),
         ),
         title: const Text("Settings"),
@@ -56,13 +54,13 @@ class _SettingViewState extends ConsumerState<SettingPage> with SettingView {
                       ),
                     ],
                   ),
-                  ListTile(
+                  /* ListTile(
                     title: const Text("Log Out"),
                     leading: const Icon(Icons.logout),
                     onTap: () async {
                       await _viewModel.logout();
                     },
-                  )
+                  ) */
                 ],
               ),
       ),

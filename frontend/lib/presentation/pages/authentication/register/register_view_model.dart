@@ -37,11 +37,12 @@ class RegisterViewModel extends BaseViewModel<RegisterView> {
   Future<void> createUser() async {
     try {
       toggleLoadingOn(true);
-      await _auth.create(
+      await _auth.exceptionHandler(_auth.create(
+        userId: 'unique()',
         email: emailContoller.text,
         password: passwordContoller.text,
         name: nameContoller.text,
-      );
+      ));
 
       await _auth.createSession(
           email: emailContoller.text, password: passwordContoller.text);
